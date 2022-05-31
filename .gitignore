@@ -11,3 +11,5 @@ bin
 .settings/
 *~
 
+# Ignore Intellij Idea stuff
+.idea/
