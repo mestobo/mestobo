@@ -1,0 +1,27 @@
+2022-07-18
+==========
+
+* Basic design
+** GUI: Regular MDI application; tiling etc. to be explored
+** GUI and CLI setup simultanously
+
+* Reactive programming to be explored
+
+* GraalVM to be explored / integrated from the start to see if application frameworks work with it
+
+* Common libraries: Preferrably Apache Commons libraries
+* Domain libraries: dcm4che, HAPI FHIR, HAPI hl7v2
+
+* CI / CD Pipeline should be setup via GitHub Actions
+* sonarqube or other static code check integration to be investigated
+* other "badges" / pipelines to be investigated
+
+* Coding Style: 
+** indentation by tabs
+** avoid multiple returns
+=> Proposals of project members welcome
+
+* Documentation
+** online help system to be established
+
+* i18n: english as main language, build in translatability
