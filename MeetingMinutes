@@ -1,3 +1,15 @@
+2022-08-29
+==========
+
+* i18n
+** ResourceBundleEditor?
+** Supported languages?
+** Should strings like "HL7" or "DICOM" be i18n?
+
+* JavaFX-Libraries to evaluate
+** WorkbenchFX?
+** FormsFX?
+
 2022-07-18
 ==========
 
