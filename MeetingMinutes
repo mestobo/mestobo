@@ -2,13 +2,19 @@
 ==========
 
 * i18n
+** Conventional vs. Code-Generation Tool?
+=> Conventional is just fine
 ** ResourceBundleEditor?
+=> Everybody is invited to find a better tool. If none comes up, we will use ResourceBundleEditor
 ** Supported languages?
+=> en, de
 ** Should strings like "HL7" or "DICOM" be i18n?
+=> yes, we put them in the .properties files
 
 * JavaFX-Libraries to evaluate
 ** WorkbenchFX?
 ** FormsFX?
+=> yes, we should evaluate this
 
 2022-07-18
 ==========
