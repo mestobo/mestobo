@@ -1,27 +1,28 @@
 package net.mestobo;
 
+import com.dlsc.workbenchfx.Workbench;
+
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class MestoboApplication extends Application {
-    public static void start(String[] args) {
-        launch(args);
-    }
 
-    @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Hello World!");
-        Button button = new Button();
-        button.setText("Say 'Hello World'");
-        button.setOnAction((ActionEvent event) -> System.out.println("Hello World!"));
+	public static void start(String[] args) {
+		launch(args);
+	}
 
-        StackPane root = new StackPane();
-        root.getChildren().add(button);
-        primaryStage.setScene(new Scene(root, 300, 250));
-        primaryStage.show();
-    }
+	@Override
+	public void start(Stage primaryStage) {
+		primaryStage.setTitle(I18N.get("WindowTitle"));
+
+		Workbench workbench = Workbench.builder(new SendADTModule(), new SendADTModule()).modulesPerPage(6).build();
+
+		Screen primaryScreen = Screen.getPrimary();
+
+		primaryStage.setScene(new Scene(workbench, primaryScreen.getBounds().getWidth() / 2,
+				primaryScreen.getBounds().getHeight() / 2));
+		primaryStage.show();
+	}
 }
