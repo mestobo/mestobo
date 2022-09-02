@@ -1,3 +1,18 @@
+* WorkbenchFX evaluation
++ Easy to setup, new modules can easily be added
++ Toolbars, Drawers, Dialogs are nice stuff
++ Dirty handling ("Do you want to save?") integrated
+- Feels (too) much like a mobile application
+- Modules cannot be opened more than once
+- Default styling is huge on my desktop
+
+* FormsFX evaluation
++ Nice fluent API
++ I18N Service is nice
+- Single column layout is the only one available
+- No way to retrieve validation results of a form (self explaining disabled action button)
+- No buttons, i.e. no "SearchForm", "DetailForm", etc.; Could provide that on top ...
+
 2022-08-29
 ==========
 
