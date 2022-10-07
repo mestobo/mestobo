@@ -4,9 +4,6 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import com.dlsc.formsfx.model.util.ResourceBundleService;
-import com.dlsc.formsfx.model.util.TranslationService;
-
 /** I18N encapsulates internationalization.
  * @author Robert Lichtenberger
  */
@@ -23,9 +20,5 @@ public class I18N {
 			System.err.println("Missing / wrong i18n key: " + key);
 			return key;
 		}
-	}	
-	
-	public static TranslationService getTranslationService() {
-		return new ResourceBundleService(ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME));
-	}
+	}		
 }

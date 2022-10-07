@@ -24,8 +24,7 @@ dependencies {
 
 	// This dependency is used by the application.
 	implementation 'com.google.guava:guava:30.1.1-jre'
-	implementation 'com.dlsc.workbenchfx:workbenchfx-core:11.1.0'
-	implementation 'com.dlsc.formsfx:formsfx-core:11.3.2'
+	implementation 'com.panemu:tiwulfx-dock:0.2'
 }
 
 application {
