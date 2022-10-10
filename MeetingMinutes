@@ -1,6 +1,14 @@
-* Evaluate SupernautFX (https://www.supernaut.app/SupernautFX/supernaut-user-guide.html) as DI Framework
-* Evaluate JMetro (https://pixelduke.com/java-javafx-theme-jmetro/)
+2022-10-10
+==========
+
 * Evaluate Tiwulfx-dock (https://github.com/panemu/tiwulfx-dock) as Tabbed Browsing base
+** Let's keep it for now
+* Evaluate JMetro (https://pixelduke.com/java-javafx-theme-jmetro/)
+** Let's remove it
+* Evaluate SupernautFX (https://www.supernaut.app/SupernautFX/supernaut-user-guide.html) as DI Framework
+** Didn't work with eclipse
+* Evaluate Google Guice as DI Framework
+** Let's continue with the evaluation, looks promising
 
 2022-09-26
 ==========
