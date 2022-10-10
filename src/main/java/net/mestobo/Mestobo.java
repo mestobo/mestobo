@@ -9,6 +9,6 @@ package net.mestobo;
  */
 public class Mestobo {
 	public static void main(String[] args) {
-		MestoboApplication.start(args);
+		FxLauncher.start(args);
 	}
 }

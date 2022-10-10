@@ -25,7 +25,7 @@ dependencies {
 	// This dependency is used by the application.
 	implementation 'com.google.guava:guava:30.1.1-jre'
 	implementation 'com.panemu:tiwulfx-dock:0.2'
-	implementation 'org.jfxtras:jmetro:11.6.16'
+	implementation 'com.google.inject:guice:5.1.0'
 }
 
 application {

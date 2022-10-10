@@ -1,5 +1,7 @@
 package net.mestobo;
 
+import com.google.inject.Inject;
+
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -15,6 +17,8 @@ public class MestoboMenuBar extends MenuBar {
 	private MenuItem hl7SendAdt;
 	private MenuItem newTab;
 	
+	@Inject
+	private MestoboApplication mestoboApp;
 	
 	public MestoboMenuBar() {
 		setupMenu();
@@ -30,7 +34,7 @@ public class MestoboMenuBar extends MenuBar {
 	private void setupHl7Menu() {
 		hl7Menu= new Menu(I18N.get("HL7")); 
 		hl7SendAdt = new MenuItem(I18N.get("SendADT"));
-		hl7SendAdt.setOnAction(e -> MestoboApplication.getInstance().showPage(new SendHL7Page()));
+		hl7SendAdt.setOnAction(e -> mestoboApp.showPage(new SendHL7Page()));
 		hl7Menu.getItems().addAll(hl7SendAdt);
 		getMenus().add(hl7Menu);		
 	}
@@ -39,7 +43,7 @@ public class MestoboMenuBar extends MenuBar {
 		extrasMenu= new Menu(I18N.get("Extras")); 
 		newTab = new MenuItem(I18N.get("NewTab"));
 		newTab.setAccelerator(KeyCombination.keyCombination("Shortcut+T"));
-		newTab.setOnAction(e -> MestoboApplication.getInstance().newTab());
+		newTab.setOnAction(e -> mestoboApp.newTab());
 		extrasMenu.getItems().addAll(newTab);
 		getMenus().add(extrasMenu);		
 	}
