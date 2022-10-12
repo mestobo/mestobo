@@ -19,9 +19,13 @@ public class MestoboMenuBar extends MenuBar {
 	
 	@Inject
 	public MestoboMenuBar(Set<MenuProvider> menuProviders) {
+		// To get a defined menu order, we predefine the main menu entries
+		getOrCreateMenu(I18N.get("HL7"));
+		getOrCreateMenu(I18N.get("Extras"));
+
 		for (MenuProvider provider : menuProviders) {
 			provider.setupMenu(this);
-		}
+		}			
 	}
 	
 	public void addMenu(String menuLabel, String category, MenuItem menuItem, EventHandler<ActionEvent> eventHandler) {
