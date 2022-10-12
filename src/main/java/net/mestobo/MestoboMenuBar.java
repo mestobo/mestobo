@@ -1,53 +1,46 @@
 package net.mestobo;
 
+import java.util.Set;
+
 import com.google.inject.Inject;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.KeyCombination;
 
 /** MestoboMenuBar provides the main window menu bar for mestobo.
  * @author Robert Lichtenberger
  */
 public class MestoboMenuBar extends MenuBar {
 
-	private Menu hl7Menu;
-	private Menu extrasMenu;
-	private MenuItem hl7SendAdt;
-	private MenuItem newTab;
+	private static Object CATEGORY_KEY = new Object();
 	
 	@Inject
-	private MestoboApplication mestoboApp;
-	
-	public MestoboMenuBar() {
-		setupMenu();
-	}
-
-
-	private void setupMenu() {
-		setupHl7Menu();
-		setupExtrasMenu();
-	}
-
-
-	private void setupHl7Menu() {
-		hl7Menu= new Menu(I18N.get("HL7")); 
-		hl7SendAdt = new MenuItem(I18N.get("SendADT"));
-		hl7SendAdt.setOnAction(e -> mestoboApp.showPage(new SendHL7Page()));
-		hl7Menu.getItems().addAll(hl7SendAdt);
-		getMenus().add(hl7Menu);		
+	public MestoboMenuBar(Set<MenuProvider> menuProviders) {
+		for (MenuProvider provider : menuProviders) {
+			provider.setupMenu(this);
+		}
 	}
 	
-	private void setupExtrasMenu() {
-		extrasMenu= new Menu(I18N.get("Extras")); 
-		newTab = new MenuItem(I18N.get("NewTab"));
-		newTab.setAccelerator(KeyCombination.keyCombination("Shortcut+T"));
-		newTab.setOnAction(e -> mestoboApp.newTab());
-		extrasMenu.getItems().addAll(newTab);
-		getMenus().add(extrasMenu);		
+	public void addMenu(String menuLabel, String category, MenuItem menuItem, EventHandler<ActionEvent> eventHandler) {
+		Menu menu = getOrCreateMenu(menuLabel);
+		menuItem.getProperties().put(CATEGORY_KEY, category);
+		menuItem.setOnAction(eventHandler);
+		menu.getItems().add(menuItem);
 	}
 
 
-	
+	private Menu getOrCreateMenu(String menuLabel) {
+		Menu menu = getMenus().stream()
+			.filter(m -> m.getText().equals(menuLabel))
+			.findFirst()
+			.orElse(null);
+		if (menu == null) {
+			menu = new Menu(menuLabel);
+			getMenus().add(menu);
+		}
+		return menu;
+	}
 }

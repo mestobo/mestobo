@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class MestoboTest {
 	@Test
-	void appHasAGreeting() {
+	void testAppCreation() {
 		Mestobo classUnderTest = new Mestobo();
 		assertNotNull(classUnderTest);
 	}

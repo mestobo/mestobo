@@ -4,8 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
-public class SendHL7Page extends Page {
-
+public class SendHL7Page extends MenuPage {
 	
 	public SendHL7Page() {
 		super(I18N.get("SendADT"));
@@ -21,4 +20,18 @@ public class SendHL7Page extends Page {
 		return form;
 	}
 
+	@Override
+	public String getMenuLabel() {
+		return I18N.get("HL7");
+	}
+	
+	@Override
+	public String getMenuCategory() {
+		return "adt";
+	}
+
+	@Override
+	public String getMenuItemLabel() {
+		return I18N.get("SendADT");
+	}
 }

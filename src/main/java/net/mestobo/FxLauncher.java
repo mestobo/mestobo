@@ -1,6 +1,5 @@
 package net.mestobo;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -18,7 +17,11 @@ public class FxLauncher extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
-		Injector injector = Guice.createInjector(new AbstractModule() {
+		Injector injector = Guice.createInjector(new InterfaceMultibindModule() {
+			@Override
+			protected void configure() {
+				multibind(MenuProvider.class).toAllImplementers();
+			}
 		});
 		application = injector.getInstance(MestoboApplication.class);
 		application.start(primaryStage);
