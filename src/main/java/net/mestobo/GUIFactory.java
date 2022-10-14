@@ -26,7 +26,7 @@ public class GUIFactory {
 		Class<?> parentClass = parent.getClass();
 		Package parentPackage = parentClass.getPackage();
 		
-		node.getStyleClass().addAll("syn", parentPackage.getName());
+		node.getStyleClass().addAll("mestobo", parentPackage.getName());
 		Class<?> current = parentClass;
 		while (current != null && current.getPackage().getName().startsWith("net.mestobo")) {
 			node.getStyleClass().add(current.getSimpleName());

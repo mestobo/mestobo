@@ -6,3 +6,12 @@
 	-fx-vgap: 2em;	
 	-fx-padding: 1em;
 }
+
+.Form#topbar {
+	-fx-gap: 1em;
+	-fx-padding: 0.5em;
+}
+
+.Form#topbar > * {
+	-fx-alignment: center-right;
+}
