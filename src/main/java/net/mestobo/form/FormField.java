@@ -56,9 +56,7 @@ public abstract class FormField<T, SELF extends FormField<T, SELF>> {
 	private void mustNotBeEmpty(Check.Context check) {
 		if (emptyProperty().get()) {
 // TODO :: error or warning?			
-			check.error(I18N.get("FieldMustNotBeEmpty"));
-// TODO :: parameterized i18n messages ...			
-//			check.warn(I18N.get("FieldMustNotBeEmpty", getLabel()));
+			check.error(I18N.get("FieldMustNotBeEmpty", getLabel()));
 		}
 	}	
 	
