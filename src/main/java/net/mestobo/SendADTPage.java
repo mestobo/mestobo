@@ -13,11 +13,9 @@ import ca.uhn.hl7v2.model.v27.segment.PID;
 import ca.uhn.hl7v2.parser.Parser;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
-import net.mestobo.Form.Field;
+import net.mestobo.form.DateFormField;
+import net.mestobo.form.Form;
+import net.mestobo.form.TextFormField;
 
 /** SendADTPage allows to create/send an ADT message. */
 public class SendADTPage extends MenuPage {
@@ -32,22 +30,10 @@ public class SendADTPage extends MenuPage {
 	protected Node createPresentation() {
 		Form form = new Form();
 		form.addButton(I18N.get("Send"), "send", this::send);
-		Field<TextField> fn = form.addField(I18N.get("FirstName"), GUIFactory.create(TextField.class, form, "firstname"));
-		// TODO :: this is way too clumsy ...
-		form.getValidator().createCheck()
-			.dependsOn("text", fn.presentation().textProperty())
-			.withMethod(c -> {
-				String text = c.get("text");
-				if (text.isBlank()) {
-					c.error("Required field"); // TODO: i18n strings with parameters ...
-				}
-			})
-			.decorates(fn.presentation()) // or the outer box?
-			.immediate();
-			
-		form.addField(I18N.get("LastName"), GUIFactory.create(TextField.class, form, "lastname"));
-		form.addField(I18N.get("BirthDate"), GUIFactory.create(DatePicker.class, form, "birthdate"));
-		form.addField(I18N.get("VisitNumber"), GUIFactory.create(TextField.class, form, "visitnumber"));
+		form.addField("firstname", new TextFormField(I18N.get("FirstName"))).required();
+		form.addField("lastname", new TextFormField(I18N.get("LastName"))).required();
+		form.addField("birthdate", new DateFormField(I18N.get("BirthDate"))).required();
+		form.addField("visitnumber", new TextFormField(I18N.get("VisitNumber")));
 		return form;
 	}
 
