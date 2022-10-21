@@ -17,7 +17,7 @@ import net.synedra.validatorfx.Check;
 public abstract class FormField<T, SELF extends FormField<T, SELF>> {
 	private String label;
 	private VBox presentation;
-	private Form form;
+	protected Form form;
 	
 	FormField(String label) {
 		this.label = label;
@@ -53,10 +53,10 @@ public abstract class FormField<T, SELF extends FormField<T, SELF>> {
 		return self();
 	}
 	
-	private void mustNotBeEmpty(Check.Context check) {
+	private void mustNotBeEmpty(Check.Context context) {
 		if (emptyProperty().get()) {
 // TODO :: error or warning?			
-			check.error(I18N.get("FieldMustNotBeEmpty", getLabel()));
+			context.error(I18N.get("FieldMustNotBeEmpty", getLabel()));
 		}
 	}	
 	

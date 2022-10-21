@@ -30,8 +30,8 @@ public class SendADTPage extends MenuPage {
 	protected Node createPresentation() {
 		Form form = new Form();
 		form.addButton(I18N.get("Send"), "send", this::send);
-		form.addField("firstname", new TextFormField(I18N.get("FirstName"))).required();
 		form.addField("lastname", new TextFormField(I18N.get("LastName"))).required();
+		form.addField("firstname", new TextFormField(I18N.get("FirstName"))).maxLength(30);
 		form.addField("birthdate", new DateFormField(I18N.get("BirthDate"))).required();
 		form.addField("visitnumber", new TextFormField(I18N.get("VisitNumber")));
 		return form;
