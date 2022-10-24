@@ -65,7 +65,7 @@ public class TextFormField extends FormField<String, TextFormField> {
 
 	private void checkMaxLength(Check.Context context, int maxLength) {
 		if (valueProperty().getValue().length() > maxLength) {
-			context.error(I18N.get("TooLong", getLabel(), Integer.toString(maxLength)));
+			context.warn(I18N.get("TooLong", getLabel(), Integer.toString(maxLength)));
 		}
 	}
 	

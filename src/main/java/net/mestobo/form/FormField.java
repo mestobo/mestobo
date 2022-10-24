@@ -55,10 +55,30 @@ public abstract class FormField<T, SELF extends FormField<T, SELF>> {
 	
 	private void mustNotBeEmpty(Check.Context context) {
 		if (emptyProperty().get()) {
-// TODO :: error or warning?			
 			context.error(I18N.get("FieldMustNotBeEmpty", getLabel()));
 		}
-	}	
+	}
+	
+	/** Set this field as required (i.e. field must not be empty). */
+	public SELF recommended() {
+		form.getValidator().createCheck()
+			.dependsOn("isEmpty", emptyProperty())
+			.withMethod(this::shouldNotBeEmpty)
+			.decorates(getPresentation())
+			.immediate();
+		return self();
+	}
+	
+	private void shouldNotBeEmpty(Check.Context context) {
+		if (emptyProperty().get()) {
+			context.warn(I18N.get("FieldMustNotBeEmpty", getLabel()));
+		}
+	}
+	
+	public SELF defaultValue(T defaultValue) {
+		valueProperty().setValue(defaultValue);
+		return self();
+	}
 	
 	public String getLabel() {
 		return label;

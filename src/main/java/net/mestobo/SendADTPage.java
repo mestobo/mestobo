@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import net.mestobo.form.DateFormField;
 import net.mestobo.form.Form;
+import net.mestobo.form.IntegerFormField;
 import net.mestobo.form.TextFormField;
 
 /** SendADTPage allows to create/send an ADT message. */
@@ -30,9 +31,11 @@ public class SendADTPage extends MenuPage {
 	protected Node createPresentation() {
 		Form form = new Form();
 		form.addButton(I18N.get("Send"), "send", this::send);
-		form.addField("lastname", new TextFormField(I18N.get("LastName"))).required();
+		form.addField("host", new TextFormField(I18N.get("Host"))).required();
+		form.addField("port", new IntegerFormField(I18N.get("Port"))).defaultValue(2575).required();
+		form.addField("lastname", new TextFormField(I18N.get("LastName"))).recommended();
 		form.addField("firstname", new TextFormField(I18N.get("FirstName"))).maxLength(30);
-		form.addField("birthdate", new DateFormField(I18N.get("BirthDate"))).required();
+		form.addField("birthdate", new DateFormField(I18N.get("BirthDate"))).recommended();
 		form.addField("visitnumber", new TextFormField(I18N.get("VisitNumber")));
 		return form;
 	}
