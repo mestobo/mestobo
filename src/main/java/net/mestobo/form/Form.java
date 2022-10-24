@@ -32,6 +32,12 @@ public class Form extends BorderPane {
 		setCenter(flow);
 	}
 	
+	/** Add field to form.
+	 * @param <T> The type of the field. 
+	 * @param dataIndex The data index (must be unique within the form) of the field
+	 * @param formField The field itself
+	 * @return The given formField
+	 */
 	public <T extends FormField<?, T>> T addField(String dataIndex, T formField) {
 		formFields.put(dataIndex, formField);
 		formField.setForm(this);
@@ -54,5 +60,16 @@ public class Form extends BorderPane {
 	
 	public Validator getValidator() {
 		return validator;
+	}
+	
+	/** Get value of a field.
+	 * @param <T>
+	 * @param dataIndex The data index of the field to get
+	 * @return The current value of the field or null if no field exists with the given dataIndex
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T getValue(String dataIndex) {
+		FormField<T, ?> formField = (FormField<T, ?>) formFields.get(dataIndex);
+		return formField != null ? formField.valueProperty().getValue() : null;
 	}
 }

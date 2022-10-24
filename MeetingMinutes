@@ -1,3 +1,11 @@
+2022-10-24
+==========
+* Changes in GUI: Form framework begun, Validation inserted, HL7 ADT Building begun
+* CI Pipeline setup
+* No decision yet concerning __ variables
+* Validation: Use warnings for stuff that SHOULD be filled but can (purposely) be ignored (e.g. last name for ADT), 
+  use error for stuff that makes the very operation impossible (e.g. no target for mllp send).
+
 2022-10-10
 ==========
 

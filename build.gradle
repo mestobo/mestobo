@@ -27,7 +27,7 @@ dependencies {
 	implementation 'com.panemu:tiwulfx-dock:0.2'
 	implementation 'com.google.inject:guice:5.1.0'
 	implementation 'ca.uhn.hapi:hapi-base:2.3'
-	implementation 'ca.uhn.hapi:hapi-structures-v27:2.3'
+	implementation 'ca.uhn.hapi:hapi-structures-v25:2.3'
 	implementation 'net.synedra:validatorfx:0.4.0'
 }
 
