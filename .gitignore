@@ -13,3 +13,4 @@ bin
 
 # Ignore Intellij Idea stuff
 .idea/
+/id_file
