@@ -3,6 +3,7 @@ package net.mestobo;
 import java.util.Set;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,6 +14,7 @@ import javafx.scene.control.MenuItem;
 /** MestoboMenuBar provides the main window menu bar for mestobo.
  * @author Robert Lichtenberger
  */
+@Singleton
 public class MestoboMenuBar extends MenuBar {
 
 	private static Object CATEGORY_KEY = new Object();
