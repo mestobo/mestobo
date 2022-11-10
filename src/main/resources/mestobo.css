@@ -7,6 +7,10 @@
 	-fx-padding: 1em;
 }
 
+.Form .FormField {
+	-fx-min-width: 15em;
+}
+
 .Form#topbar {
 	-fx-gap: 1em;
 	-fx-padding: 0.5em;

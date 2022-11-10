@@ -21,6 +21,7 @@ import ca.uhn.hl7v2.model.v25.segment.PV1;
 import ca.uhn.hl7v2.parser.Parser;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import net.mestobo.form.ComboFormField;
 import net.mestobo.form.DateFormField;
 import net.mestobo.form.Form;
 import net.mestobo.form.IntegerFormField;
@@ -45,6 +46,7 @@ public class SendADTPage extends MenuPage {
 		form.addField("patientid", new TextFormField(I18N.get("PatientID"))).recommended();
 		form.addField("lastname", new TextFormField(I18N.get("LastName"))).recommended();
 		form.addField("firstname", new TextFormField(I18N.get("FirstName"))).maxLength(30);
+		form.addField("sex", new ComboFormField(I18N.get("Sex"))).withValues("A", "F", "M", "N", "O", "U").defaultValue("M");
 		form.addField("birthdate", new DateFormField(I18N.get("BirthDate"))).recommended();
 		form.addField("visitnumber", new TextFormField(I18N.get("VisitNumber")));
 		return form;
@@ -78,10 +80,10 @@ public class SendADTPage extends MenuPage {
 			
 			PID pid = request.getPID();
 			pid = request.getPID();
-			// TODO :: get values from form ...
 			pid.getPatientName(0).getFamilyName().getSurname().setValue(form.getValue("lastname"));
 			pid.getPatientName(0).getGivenName().setValue(form.getValue("firstname"));
-			pid.getPatientIdentifierList(0).getIDNumber().setValue(form.getValue("patientid")); // TODO :: correct segment?			
+			pid.getPatientIdentifierList(0).getIDNumber().setValue(form.getValue("patientid")); // TODO :: correct segment?
+			pid.getAdministrativeSex().setValue(form.getValue("sex"));
 			LocalDate bday = form.getValue("birthdate");
 			if (bday != null) {
 				pid.getDateTimeOfBirth().getTime().setValue(Date.from(bday.atStartOfDay().toInstant(ZoneOffset.UTC)));

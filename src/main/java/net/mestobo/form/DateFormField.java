@@ -9,6 +9,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.layout.Region;
 import net.mestobo.GUIFactory;
 
+/** DateFormField allows to give a single date. */
 public class DateFormField extends FormField<LocalDate, DateFormField> {
 
 	private DatePicker datePicker;
