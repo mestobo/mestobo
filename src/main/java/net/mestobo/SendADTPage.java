@@ -43,6 +43,8 @@ public class SendADTPage extends MenuPage {
 		form.addButton(I18N.get("Send"), "send", this::send);
 		form.addField("host", new TextFormField(I18N.get("Host"))).required();
 		form.addField("port", new IntegerFormField(I18N.get("Port"))).defaultValue(2575).required();
+		form.addField("receiving_application", new TextFormField(I18N.get("ReceivingApplication"))).required().defaultValue("APP");
+		form.addField("receiving_facility", new TextFormField(I18N.get("ReceivingApplication"))).required().defaultValue("FACILITY");
 		form.addField("patientid", new TextFormField(I18N.get("PatientID"))).recommended();
 		form.addField("lastname", new TextFormField(I18N.get("LastName"))).recommended();
 		form.addField("firstname", new TextFormField(I18N.get("FirstName"))).maxLength(30);
@@ -76,13 +78,17 @@ public class SendADTPage extends MenuPage {
 			
 			MSH mshSegment = request.getMSH();
 			mshSegment.getSendingApplication().getNamespaceID().setValue("Mestobo");
+			mshSegment.getSendingFacility().getNamespaceID().setValue("SendADTPage");
+			mshSegment.getReceivingApplication().getNamespaceID().setValue(form.getValue("receiving_application"));
+			mshSegment.getReceivingFacility().getNamespaceID().setValue(form.getValue("receiving_facility"));
 			mshSegment.getSequenceNumber().setValue("" + counter.getAndIncrement());
 			
 			PID pid = request.getPID();
 			pid = request.getPID();
 			pid.getPatientName(0).getFamilyName().getSurname().setValue(form.getValue("lastname"));
 			pid.getPatientName(0).getGivenName().setValue(form.getValue("firstname"));
-			pid.getPatientIdentifierList(0).getIDNumber().setValue(form.getValue("patientid")); // TODO :: correct segment?
+			pid.getPatientName(0).getNameTypeCode().setValue(getMenuCategory());
+			pid.getPatientIdentifierList(0).parse(form.getValue("patientid")); 
 			pid.getAdministrativeSex().setValue(form.getValue("sex"));
 			LocalDate bday = form.getValue("birthdate");
 			if (bday != null) {
@@ -90,13 +96,14 @@ public class SendADTPage extends MenuPage {
 			}
 			
 			EVN evn = request.getEVN();
+			evn.getEventOccurred().getTime().setValue(new Date());
 			evn.getRecordedDateTime().getTime().setValue(new Date());
 			
 			PV1 pv1 = request.getPV1();
 			pv1.getSetIDPV1().setValue("1");
 			pv1.getPatientClass().setValue("I"); // inpatient ... make selectable?
-			pv1.getVisitNumber().getIDNumber().setValue(form.getValue("visitnumber"));
-			
+			pv1.getVisitNumber().parse(form.getValue("visitnumber"));
+
 			try(HapiContext context = new DefaultHapiContext()) {
 				Parser parser = context.getPipeParser();
 				System.out.println("Sending:\n" + parser.encode(request));
@@ -105,6 +112,7 @@ public class SendADTPage extends MenuPage {
 				Message response = initiator.sendAndReceive(request);
 				System.out.println("Response:\n" + parser.encode(response));
 			} 
+						
 		} catch (HL7Exception | IOException | LLPException e) {
 			throw new RuntimeException(e);	// TODO error handling?
 		}
