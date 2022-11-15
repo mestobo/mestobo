@@ -9,7 +9,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import net.mestobo.GUIFactory;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
@@ -20,10 +20,10 @@ public class Form extends BorderPane {
 	private Map<String, FormField<?, ?>> formFields = new LinkedHashMap<>();
 	private FlowPane flow;
 	private Validator validator = new Validator();
-	private VBox topBar;
+	private HBox topBar;
 		
 	public Form() {
-		topBar = GUIFactory.create(VBox.class, this, "topbar");
+		topBar = GUIFactory.create(HBox.class, this, "topbar");
 		setTop(topBar);
 		
 		flow = GUIFactory.create(FlowPane.class, this, "flow");
@@ -49,6 +49,13 @@ public class Form extends BorderPane {
 		Button button = GUIFactory.create(Button.class, this, id);
 		button.setText(label);
 		button.setOnAction(eventHandler);
+		topBar.getChildren().add(button);
+	}
+	
+	public void addValidationButton(String label, String id, EventHandler<ActionEvent> eventHandler) {
+		Button button = GUIFactory.create(Button.class, this, id);
+		button.setText(label);
+		button.setOnAction(eventHandler);
 		TooltipWrapper<Button> wrappedButton = new TooltipWrapper<>(
 			button,
 			validator.containsErrorsProperty(),
@@ -71,5 +78,13 @@ public class Form extends BorderPane {
 	public <T> T getValue(String dataIndex) {
 		FormField<T, ?> formField = (FormField<T, ?>) formFields.get(dataIndex);
 		return formField != null ? formField.valueProperty().getValue() : null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> void setValue(String dataIndex, T value) {
+		FormField<T, ?> formField = (FormField<T, ?>) formFields.get(dataIndex);
+		if (formField != null) {
+			formField.valueProperty().setValue(value);
+		}
 	}
 }

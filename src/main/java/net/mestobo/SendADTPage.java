@@ -2,9 +2,12 @@ package net.mestobo;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
+
+import com.github.javafaker.Faker;
 
 import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.HL7Exception;
@@ -40,7 +43,8 @@ public class SendADTPage extends MenuPage {
 	@Override
 	protected Node createPresentation() {
 		form = new Form();
-		form.addButton(I18N.get("Send"), "send", this::send);
+		form.addButton(I18N.get("RandomValues"), "randomvalues", this::fillWithRandomValues);
+		form.addValidationButton(I18N.get("Send"), "send", this::send);
 		form.addField("host", new TextFormField(I18N.get("Host"))).required();
 		form.addField("port", new IntegerFormField(I18N.get("Port"))).defaultValue(2575).required();
 		form.addField("receiving_application", new TextFormField(I18N.get("ReceivingApplication"))).required().defaultValue("APP");
@@ -48,10 +52,20 @@ public class SendADTPage extends MenuPage {
 		form.addField("patientid", new TextFormField(I18N.get("PatientID"))).recommended();
 		form.addField("lastname", new TextFormField(I18N.get("LastName"))).recommended();
 		form.addField("firstname", new TextFormField(I18N.get("FirstName"))).maxLength(30);
-		form.addField("sex", new ComboFormField(I18N.get("Sex"))).withValues("A", "F", "M", "N", "O", "U").defaultValue("M");
+		form.addField("sex", new ComboFormField(I18N.get("Sex"))).withValues("A", "F", "M", "N", "O", "U");
 		form.addField("birthdate", new DateFormField(I18N.get("BirthDate"))).recommended();
 		form.addField("visitnumber", new TextFormField(I18N.get("VisitNumber")));
 		return form;
+	}
+	
+	private void fillWithRandomValues(ActionEvent e) {
+		Faker faker = new Faker();
+		form.setValue("patientid", faker.idNumber().valid());
+		form.setValue("firstname", faker.name().firstName());
+		form.setValue("lastname", faker.name().lastName());
+		form.setValue("sex", faker.demographic().sex().substring(0, 1));
+		form.setValue("birthdate", faker.date().birthday(0, 105).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		form.setValue("visitnumber", faker.idNumber().valid());		
 	}
 
 	@Override
@@ -117,4 +131,5 @@ public class SendADTPage extends MenuPage {
 			throw new RuntimeException(e);	// TODO error handling?
 		}
 	}
+
 }

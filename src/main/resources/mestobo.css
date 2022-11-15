@@ -12,8 +12,9 @@
 }
 
 .Form#topbar {
-	-fx-gap: 1em;
+	-fx-spacing: 1em;
 	-fx-padding: 0.5em;
+	-fx-alignment: center-right;
 }
 
 .Form#topbar > * {
