@@ -11,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import net.mestobo.GUIFactory;
+import net.mestobo.ImageButton;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
 
@@ -45,15 +46,16 @@ public class Form extends BorderPane {
 		return formField;
 	}
 	
-	public void addButton(String label, String id, EventHandler<ActionEvent> eventHandler) {
-		Button button = GUIFactory.create(Button.class, this, id);
+	public ImageButton addButton(String label, String id, EventHandler<ActionEvent> eventHandler) {
+		ImageButton button = GUIFactory.create(ImageButton.class, this, id);
 		button.setText(label);
 		button.setOnAction(eventHandler);
 		topBar.getChildren().add(button);
+		return button;
 	}
 	
-	public void addValidationButton(String label, String id, EventHandler<ActionEvent> eventHandler) {
-		Button button = GUIFactory.create(Button.class, this, id);
+	public ImageButton addValidationButton(String label, String id, EventHandler<ActionEvent> eventHandler) {
+		ImageButton button = GUIFactory.create(ImageButton.class, this, id);
 		button.setText(label);
 		button.setOnAction(eventHandler);
 		TooltipWrapper<Button> wrappedButton = new TooltipWrapper<>(
@@ -63,6 +65,7 @@ public class Form extends BorderPane {
 		);
 		GUIFactory.prepare(wrappedButton, this, id + "-wrapper");
 		topBar.getChildren().add(wrappedButton);
+		return button;
 	}
 	
 	public Validator getValidator() {

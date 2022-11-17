@@ -43,8 +43,8 @@ public class SendADTPage extends MenuPage {
 	@Override
 	protected Node createPresentation() {
 		form = new Form();
-		form.addButton(I18N.get("RandomValues"), "randomvalues", this::fillWithRandomValues);
-		form.addValidationButton(I18N.get("Send"), "send", this::send);
+		form.addButton(I18N.get("RandomValues"), "randomvalues", this::fillWithRandomValues).withIcon("dashicons-randomize");
+		form.addValidationButton(I18N.get("Send"), "send", this::send).withIcon("fth-send");
 		form.addField("host", new TextFormField(I18N.get("Host"))).required();
 		form.addField("port", new IntegerFormField(I18N.get("Port"))).defaultValue(2575).required();
 		form.addField("receiving_application", new TextFormField(I18N.get("ReceivingApplication"))).required().defaultValue("APP");
