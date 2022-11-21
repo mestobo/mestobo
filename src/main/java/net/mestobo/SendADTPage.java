@@ -55,6 +55,12 @@ public class SendADTPage extends MenuPage {
 		form.addField("sex", new ComboFormField(I18N.get("Sex"))).withValues("A", "F", "M", "N", "O", "U");
 		form.addField("birthdate", new DateFormField(I18N.get("BirthDate"))).recommended();
 		form.addField("visitnumber", new TextFormField(I18N.get("VisitNumber")));
+		form.addField("streetname", new TextFormField(I18N.get("StreetName")));
+		form.addField("streetnumber", new TextFormField(I18N.get("StreetNumber")));
+		form.addField("city", new TextFormField(I18N.get("City")));
+		form.addField("state", new TextFormField(I18N.get("State")));
+		form.addField("zipcode", new TextFormField(I18N.get("Zipcode")));
+		form.addField("country", new TextFormField(I18N.get("Country")));
 		return form;
 	}
 	
@@ -66,6 +72,12 @@ public class SendADTPage extends MenuPage {
 		form.setValue("sex", faker.demographic().sex().substring(0, 1));
 		form.setValue("birthdate", faker.date().birthday(0, 105).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		form.setValue("visitnumber", faker.idNumber().valid());		
+		form.setValue("streetname", faker.address().streetName());		
+		form.setValue("streetnumber", faker.address().streetAddressNumber());		
+		form.setValue("city", faker.address().city());		
+		form.setValue("state", faker.address().state());		
+		form.setValue("zipcode", faker.address().zipCode());		
+		form.setValue("country", faker.address().country());		
 	}
 
 	@Override
@@ -104,6 +116,12 @@ public class SendADTPage extends MenuPage {
 			pid.getPatientName(0).getNameTypeCode().setValue(getMenuCategory());
 			pid.getPatientIdentifierList(0).parse(form.getValue("patientid")); 
 			pid.getAdministrativeSex().setValue(form.getValue("sex"));
+			pid.getPatientAddress(0).getStreetAddress().getStreetName().setValue(form.getValue("streetname"));
+			pid.getPatientAddress(0).getStreetAddress().getDwellingNumber().setValue(form.getValue("streetnumber"));
+			pid.getPatientAddress(0).getCity().setValue(form.getValue("citry"));
+			pid.getPatientAddress(0).getStateOrProvince().setValue(form.getValue("state"));
+			pid.getPatientAddress(0).getZipOrPostalCode().setValue(form.getValue("zipcode"));
+			pid.getPatientAddress(0).getCountry().setValue(form.getValue("country"));
 			LocalDate bday = form.getValue("birthdate");
 			if (bday != null) {
 				pid.getDateTimeOfBirth().getTime().setValue(Date.from(bday.atStartOfDay().toInstant(ZoneOffset.UTC)));
