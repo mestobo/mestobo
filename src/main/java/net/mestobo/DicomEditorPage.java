@@ -1,7 +1,12 @@
 package net.mestobo;
 
+
 import javafx.scene.Node;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import net.mestobo.form.Form;
+import net.mestobo.form.TextFormField;
 
 public class DicomEditorPage extends MenuPage {
 	
@@ -26,7 +31,12 @@ public class DicomEditorPage extends MenuPage {
 
 	@Override
 	protected Node createPresentation() {
-		return new Form();
+		Form openFileForm = new Form();
+		openFileForm.addField("File", new TextFormField("File"));
+		
+		return new VBox(
+			openFileForm,
+			new HBox(10L, new TextArea("Dicom Dump"), new TextArea("Hex values"))
+		);
 	}
-
 }
