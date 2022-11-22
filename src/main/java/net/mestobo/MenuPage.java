@@ -1,7 +1,5 @@
 package net.mestobo;
 
-import java.lang.reflect.InvocationTargetException;
-
 import com.google.inject.Inject;
 
 import javafx.event.ActionEvent;
@@ -11,14 +9,16 @@ import javafx.scene.control.MenuItem;
 public abstract class MenuPage extends Page implements MenuProvider {
 
 	@Inject
-	private MestoboApplication mestoboApp;
-	
+	protected MestoboApplication mestoboApp;
+
 	public MenuPage(String title) {
-		super(title);	
+		super(title);
 	}
-	
+
 	abstract public String getMenuLabel();
+
 	abstract public String getMenuCategory();
+
 	abstract public String getMenuItemLabel();
 
 	@Override
@@ -26,18 +26,14 @@ public abstract class MenuPage extends Page implements MenuProvider {
 		MenuItem menuItem = new MenuItem(getMenuItemLabel());
 		menuBar.addMenu(getMenuLabel(), getMenuCategory(), menuItem, getEventHandler());
 	}
-	
-	private EventHandler<ActionEvent> getEventHandler()  {
+
+	private EventHandler<ActionEvent> getEventHandler() {
 		return e -> {
 			try {
-				mestoboApp.showPage(getClass().getDeclaredConstructor().newInstance());
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
+				mestoboApp.showPage(FxLauncher.getInjector().getInstance(getClass()));
+			} catch (IllegalArgumentException | SecurityException e1) {
 				throw new RuntimeException("Could not open page", e1);
 			}
 		};
 	}
-	
-
-
 }

@@ -8,16 +8,21 @@ import javafx.stage.Stage;
 
 /** FxLauncher serves as bootstrap to launch the application that has been built by a DI framework. */
 public class FxLauncher extends Application {
-	
-	public static MestoboApplication application;
+
+	private static MestoboApplication application;
+	private static Injector injector;
+
+	public static Injector getInjector() {
+		return injector;
+	}
 
 	public static void start(String[] args) {
 		launch(args);
 	}
-	
+
 	@Override
 	public void start(Stage primaryStage) {
-		Injector injector = Guice.createInjector(new InterfaceMultibindModule() {
+		injector = Guice.createInjector(new InterfaceMultibindModule() {
 			@Override
 			protected void configure() {
 				multibind(MenuProvider.class).toAllImplementers();
