@@ -9,13 +9,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.github.javafaker.Faker;
+import com.google.inject.Inject;
 
 import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.app.Connection;
 import ca.uhn.hl7v2.app.Initiator;
-import ca.uhn.hl7v2.llp.LLPException;
+import ca.uhn.hl7v2.model.AbstractMessage;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.v25.message.ADT_A01;
 import ca.uhn.hl7v2.model.v25.segment.EVN;
@@ -23,6 +24,8 @@ import ca.uhn.hl7v2.model.v25.segment.MSH;
 import ca.uhn.hl7v2.model.v25.segment.PID;
 import ca.uhn.hl7v2.model.v25.segment.PV1;
 import ca.uhn.hl7v2.parser.Parser;
+import ca.uhn.hl7v2.util.StandardSocketFactory;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import net.mestobo.form.ComboFormField;
@@ -36,6 +39,9 @@ public class SendADTPage extends MenuPage {
 	
 	private static AtomicLong counter = new AtomicLong(1);
 	private Form form;
+	
+	@Inject
+	private BackgroundTaskExecutor backgroundTaskExecutor;
 	
 	public SendADTPage() {
 		super(I18N.get("SendADT"));
@@ -136,18 +142,39 @@ public class SendADTPage extends MenuPage {
 			pv1.getVisitNumber().parse(form.getValue("visitnumber"));
 			pv1.getAdmitDateTime().getTime().setValue(toDate(form.getValue("admitdatetime")));
 
-			try(HapiContext context = new DefaultHapiContext()) {
-				Parser parser = context.getPipeParser();
-				System.out.println("Sending:\n" + parser.encode(request));
-				Connection connection = context.newClient(form.getValue("host"), form.getValue("port"), false);				
-				Initiator initiator = connection.getInitiator();
-				Message response = initiator.sendAndReceive(request);
-				System.out.println("Response:\n" + parser.encode(response));
-			} 
+			backgroundTaskExecutor.submit(new SendADTTask(request));
 						
-		} catch (HL7Exception | IOException | LLPException e) {
+		} catch (HL7Exception | IOException e) {
 			throw new RuntimeException(e);	// TODO error handling?
 		}
+	}
+	
+	private class SendADTTask extends Task<Void> {
+		
+		private AbstractMessage request;
+
+		public SendADTTask(AbstractMessage request) {
+			this.request = request;
+		}
+
+		@Override
+		protected Void call() throws Exception {
+			try(HapiContext context = new DefaultHapiContext()) {
+				Parser parser = context.getPipeParser();
+				StandardSocketFactory socketFactory = (StandardSocketFactory) context.getSocketFactory();
+				updateMessage(I18N.get("Connecting"));
+				// TODO :: connection timeout
+				Connection connection = context.newClient(form.getValue("host"), form.getValue("port"), false);				
+				Initiator initiator = connection.getInitiator();
+				initiator.setTimeout(30, TimeUnit.SECONDS);
+				updateMessage(I18N.get("SendingMessage"));
+				Message response = initiator.sendAndReceive(request);
+				updateMessage(I18N.get("ResponseReceived"));
+				System.out.println("Response:\n" + parser.encode(response));
+			} 
+			return null;
+		}
+		
 	}
 
 	private LocalDate toLocalDate(Date date) {
