@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.github.javafaker.Faker;
@@ -54,13 +55,14 @@ public class SendADTPage extends MenuPage {
 		form.addField("firstname", new TextFormField(I18N.get("FirstName"))).maxLength(30);
 		form.addField("sex", new ComboFormField(I18N.get("Sex"))).withValues("A", "F", "M", "N", "O", "U");
 		form.addField("birthdate", new DateFormField(I18N.get("BirthDate"))).recommended();
-		form.addField("visitnumber", new TextFormField(I18N.get("VisitNumber")));
 		form.addField("streetname", new TextFormField(I18N.get("StreetName")));
 		form.addField("streetnumber", new TextFormField(I18N.get("StreetNumber")));
 		form.addField("city", new TextFormField(I18N.get("City")));
 		form.addField("state", new TextFormField(I18N.get("State")));
 		form.addField("zipcode", new TextFormField(I18N.get("Zipcode")));
 		form.addField("country", new TextFormField(I18N.get("Country")));
+		form.addField("visitnumber", new TextFormField(I18N.get("VisitNumber")));
+		form.addField("admitdatetime", new DateFormField(I18N.get("AdmitDateTime"))); // TODO :: this should be date & time ...
 		return form;
 	}
 	
@@ -70,16 +72,17 @@ public class SendADTPage extends MenuPage {
 		form.setValue("firstname", faker.name().firstName());
 		form.setValue("lastname", faker.name().lastName());
 		form.setValue("sex", faker.demographic().sex().substring(0, 1));
-		form.setValue("birthdate", faker.date().birthday(0, 105).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-		form.setValue("visitnumber", faker.idNumber().valid());		
+		form.setValue("birthdate", toLocalDate(faker.date().birthday(0, 105)));
 		form.setValue("streetname", faker.address().streetName());		
 		form.setValue("streetnumber", faker.address().streetAddressNumber());		
 		form.setValue("city", faker.address().city());		
 		form.setValue("state", faker.address().state());		
 		form.setValue("zipcode", faker.address().zipCode());		
 		form.setValue("country", faker.address().country());		
+		form.setValue("visitnumber", faker.idNumber().valid());		
+		form.setValue("admitdatetime", toLocalDate(faker.date().future(14, TimeUnit.DAYS)));		
 	}
-
+	
 	@Override
 	public String getMenuLabel() {
 		return I18N.get("HL7");
@@ -97,7 +100,6 @@ public class SendADTPage extends MenuPage {
 	
 	public void send(ActionEvent __) { // TODO style: do we want to make unused (bind) params invisible like this?
 		try {
-			// TODO :: make hl7-version selectable?
 			// TODO :: make event selectable
 			ADT_A01 request = new ADT_A01();
 			request.initQuickstart("ADT", "A01", "P");
@@ -122,10 +124,7 @@ public class SendADTPage extends MenuPage {
 			pid.getPatientAddress(0).getStateOrProvince().setValue(form.getValue("state"));
 			pid.getPatientAddress(0).getZipOrPostalCode().setValue(form.getValue("zipcode"));
 			pid.getPatientAddress(0).getCountry().setValue(form.getValue("country"));
-			LocalDate bday = form.getValue("birthdate");
-			if (bday != null) {
-				pid.getDateTimeOfBirth().getTime().setValue(Date.from(bday.atStartOfDay().toInstant(ZoneOffset.UTC)));
-			}
+			pid.getDateTimeOfBirth().getTime().setValue(toDate(form.getValue("birthdate")));
 			
 			EVN evn = request.getEVN();
 			evn.getEventOccurred().getTime().setValue(new Date());
@@ -135,6 +134,7 @@ public class SendADTPage extends MenuPage {
 			pv1.getSetIDPV1().setValue("1");
 			pv1.getPatientClass().setValue("I"); // inpatient ... make selectable?
 			pv1.getVisitNumber().parse(form.getValue("visitnumber"));
+			pv1.getAdmitDateTime().getTime().setValue(toDate(form.getValue("admitdatetime")));
 
 			try(HapiContext context = new DefaultHapiContext()) {
 				Parser parser = context.getPipeParser();
@@ -150,4 +150,17 @@ public class SendADTPage extends MenuPage {
 		}
 	}
 
+	private LocalDate toLocalDate(Date date) {
+		return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	}
+	
+	private Date toDate(LocalDate localDate) {
+		Date date = null;
+		if (localDate != null) {
+			date = Date.from(localDate.atStartOfDay().toInstant(ZoneOffset.UTC));
+		}
+		return date;
+	}
+
+	
 }
