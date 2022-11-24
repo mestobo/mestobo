@@ -24,7 +24,6 @@ import ca.uhn.hl7v2.model.v25.segment.MSH;
 import ca.uhn.hl7v2.model.v25.segment.PID;
 import ca.uhn.hl7v2.model.v25.segment.PV1;
 import ca.uhn.hl7v2.parser.Parser;
-import ca.uhn.hl7v2.util.StandardSocketFactory;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -142,7 +141,7 @@ public class SendADTPage extends MenuPage {
 			pv1.getVisitNumber().parse(form.getValue("visitnumber"));
 			pv1.getAdmitDateTime().getTime().setValue(toDate(form.getValue("admitdatetime")));
 
-			backgroundTaskExecutor.submit(new SendADTTask(request));
+			backgroundTaskExecutor.submit(new SendADTTask(request, form.getValue("host"), form.getValue("port")));
 						
 		} catch (HL7Exception | IOException e) {
 			throw new RuntimeException(e);	// TODO error handling?
@@ -152,19 +151,22 @@ public class SendADTPage extends MenuPage {
 	private class SendADTTask extends Task<Void> {
 		
 		private AbstractMessage request;
+		private String host;
+		private int port;
 
-		public SendADTTask(AbstractMessage request) {
+		public SendADTTask(AbstractMessage request, String host, int port) {
 			this.request = request;
+			this.host = host;
+			this.port = port;
 		}
 
 		@Override
 		protected Void call() throws Exception {
 			try(HapiContext context = new DefaultHapiContext()) {
 				Parser parser = context.getPipeParser();
-				StandardSocketFactory socketFactory = (StandardSocketFactory) context.getSocketFactory();
-				updateMessage(I18N.get("Connecting"));
+				updateMessage(I18N.get("ConnectingWith", host, port));
 				// TODO :: connection timeout
-				Connection connection = context.newClient(form.getValue("host"), form.getValue("port"), false);				
+				Connection connection = context.newClient(host, port, false);				
 				Initiator initiator = connection.getInitiator();
 				initiator.setTimeout(30, TimeUnit.SECONDS);
 				updateMessage(I18N.get("SendingMessage"));
