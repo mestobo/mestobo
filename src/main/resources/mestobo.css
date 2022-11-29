@@ -1,9 +1,10 @@
 .root {
+	
 }
 
 .Form#flow {
 	-fx-hgap: 1em;
-	-fx-vgap: 2em;	
+	-fx-vgap: 2em;
 	-fx-padding: 1em;
 }
 
@@ -19,4 +20,8 @@
 
 .Form#topbar > * {
 	-fx-alignment: center-right;
+}
+
+.group-title {
+	-fx-font-size: 1.3em;
 }

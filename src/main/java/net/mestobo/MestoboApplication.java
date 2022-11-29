@@ -15,9 +15,10 @@ public class MestoboApplication {
     
     @Inject
     private MestoboMenuBar menuBar;
-    
     @Inject
     private MestoboTabPane mestoboTabPane;
+    @Inject
+    private StylesheetManager stylesheetManager;
     
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle(I18N.get("WindowTitle"));
@@ -33,9 +34,9 @@ public class MestoboApplication {
 		Screen primaryScreen = Screen.getPrimary();
 
 		scene = new Scene(root, primaryScreen.getBounds().getWidth() / 2, primaryScreen.getBounds().getHeight() / 2);
-		scene.getStylesheets().add("mestobo.css");
 		
 		primaryStage.setScene(scene);
+		stylesheetManager.addListener(scene);
 		primaryStage.show();
 	}
 	
@@ -43,7 +44,7 @@ public class MestoboApplication {
 		page.init();
 		Tab tab = mestoboTabPane.getSelectionModel().getSelectedItem();
 		if (tab == null) {
-			tab = mestoboTabPane.addTab(page.getTitle(), page.getPresentation());
+			mestoboTabPane.addTab(page.getTitle(), page.getPresentation());
 		} else {
 			tab.setText(page.getTitle());
 			tab.setContent(page.getPresentation());

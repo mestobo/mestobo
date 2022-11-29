@@ -17,17 +17,17 @@ public class FxLauncher extends Application {
 	}
 
 	public static void start(String[] args) {
-		launch(args);
-	}
-
-	@Override
-	public void start(Stage primaryStage) {
 		injector = Guice.createInjector(new InterfaceMultibindModule() {
 			@Override
 			protected void configure() {
 				multibind(MenuProvider.class).toAllImplementers();
 			}
 		});
+		launch(args);
+	}
+
+	@Override
+	public void start(Stage primaryStage) {
 		application = injector.getInstance(MestoboApplication.class);
 		application.start(primaryStage);
 		primaryStage.show();
