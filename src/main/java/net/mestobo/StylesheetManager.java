@@ -2,6 +2,7 @@ package net.mestobo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -15,6 +16,8 @@ import net.mestobo.settings.SettingsManager;
 
 @Singleton
 public class StylesheetManager {
+
+	private static final Logger LOGGER = Logger.getLogger(StylesheetManager.class.getName());
 
 	private final ObservableList<String> styles;
 	private final List<Scene> listeners = new ArrayList<>();
@@ -33,11 +36,13 @@ public class StylesheetManager {
 		applyStyles(scene);
 		listeners.add(scene);
 		scene.getWindow().setOnHidden(this::removeListener);
+		LOGGER.info("added listener: " + listeners.size());
 	}
 
 	private void removeListener(WindowEvent e) {
 		Window window = (Window)e.getSource();
 		listeners.remove(window.getScene());
+		LOGGER.info("removed listener: " + listeners.size());
 	}
 
 	private void onThemesChanged(Change<? extends String> change) {
