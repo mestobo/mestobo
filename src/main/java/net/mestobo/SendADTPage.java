@@ -2,6 +2,7 @@ package net.mestobo;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Date;
@@ -29,6 +30,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import net.mestobo.form.ComboFormField;
 import net.mestobo.form.DateFormField;
+import net.mestobo.form.DateTimeFormField;
 import net.mestobo.form.Form;
 import net.mestobo.form.IntegerFormField;
 import net.mestobo.form.TextFormField;
@@ -67,7 +69,7 @@ public class SendADTPage extends MenuPage {
 		form.addField("zipcode", new TextFormField(I18N.get("Zipcode")));
 		form.addField("country", new TextFormField(I18N.get("Country")));
 		form.addField("visitnumber", new TextFormField(I18N.get("VisitNumber")));
-		form.addField("admitdatetime", new DateFormField(I18N.get("AdmitDateTime"))); // TODO :: this should be date & time ...
+		form.addField("admitdatetime", new DateTimeFormField(I18N.get("AdmitDateTime")));
 		return form;
 	}
 	
@@ -85,7 +87,7 @@ public class SendADTPage extends MenuPage {
 		form.setValue("zipcode", faker.address().zipCode());		
 		form.setValue("country", faker.address().country());		
 		form.setValue("visitnumber", faker.idNumber().valid());		
-		form.setValue("admitdatetime", toLocalDate(faker.date().future(14, TimeUnit.DAYS)));		
+		form.setValue("admitdatetime", toLocalDateTime(faker.date().future(14, TimeUnit.DAYS)));		
 	}
 	
 	@Override
@@ -103,9 +105,8 @@ public class SendADTPage extends MenuPage {
 		return I18N.get("SendADT");
 	}
 	
-	public void send(ActionEvent __) { // TODO style: do we want to make unused (bind) params invisible like this?
+	public void send(ActionEvent __) {
 		try {
-			// TODO :: make event selectable
 			ADT_A01 request = new ADT_A01();
 			request.initQuickstart("ADT", "A01", "P");
 			
@@ -137,9 +138,9 @@ public class SendADTPage extends MenuPage {
 			
 			PV1 pv1 = request.getPV1();
 			pv1.getSetIDPV1().setValue("1");
-			pv1.getPatientClass().setValue("I"); // inpatient ... make selectable?
+			pv1.getPatientClass().setValue("I"); 
 			pv1.getVisitNumber().parse(form.getValue("visitnumber"));
-			pv1.getAdmitDateTime().getTime().setValue(toDate(form.getValue("admitdatetime")));
+			pv1.getAdmitDateTime().getTime().setValue(toDateWithTime(form.getValue("admitdatetime")));
 
 			backgroundTaskExecutor.submit(new SendADTTask(request, form.getValue("host"), form.getValue("port")));
 						
@@ -165,7 +166,7 @@ public class SendADTPage extends MenuPage {
 			try(HapiContext context = new DefaultHapiContext()) {
 				Parser parser = context.getPipeParser();
 				updateMessage(I18N.get("ConnectingWith", host, port));
-				// TODO :: connection timeout
+				// TODO :: connection timeout, cf. https://github.com/hapifhir/hapi-hl7v2/issues/89
 				Connection connection = context.newClient(host, port, false);				
 				Initiator initiator = connection.getInitiator();
 				initiator.setTimeout(30, TimeUnit.SECONDS);
@@ -183,6 +184,10 @@ public class SendADTPage extends MenuPage {
 		return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 	}
 	
+	private LocalDateTime toLocalDateTime(Date date) {
+		return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+	}
+	
 	private Date toDate(LocalDate localDate) {
 		Date date = null;
 		if (localDate != null) {
@@ -190,6 +195,15 @@ public class SendADTPage extends MenuPage {
 		}
 		return date;
 	}
+	
+	private Date toDateWithTime(LocalDateTime localDateTime) {
+		Date date = null;
+		if (localDateTime != null) {
+			date = Date.from(localDateTime.toInstant(ZoneOffset.UTC));
+		}
+		return date;
+	}
+	
 
 	
 }

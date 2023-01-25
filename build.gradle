@@ -33,6 +33,7 @@ dependencies {
 	implementation "org.kordamp.ikonli:ikonli-materialdesign-pack:$ikonliVersion"
 	implementation "org.kordamp.ikonli:ikonli-zondicons-pack:$ikonliVersion"
 	implementation "org.kordamp.ikonli:ikonli-octicons-pack:$ikonliVersion"
+	implementation "no.tornado:tornadofx-controls:1.0.4"
 }
 
 application {
