@@ -164,9 +164,9 @@ public class SendADTPage extends MenuPage {
 		@Override
 		protected Void call() throws Exception {
 			try(HapiContext context = new DefaultHapiContext()) {
+				context.setSocketFactory(new ConnectTimeoutSocketFactory());
 				Parser parser = context.getPipeParser();
 				updateMessage(I18N.get("ConnectingWith", host, port));
-				// TODO :: connection timeout, cf. https://github.com/hapifhir/hapi-hl7v2/issues/89
 				Connection connection = context.newClient(host, port, false);				
 				Initiator initiator = connection.getInitiator();
 				initiator.setTimeout(30, TimeUnit.SECONDS);
