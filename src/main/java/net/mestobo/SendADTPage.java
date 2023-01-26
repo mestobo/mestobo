@@ -142,7 +142,7 @@ public class SendADTPage extends MenuPage {
 			pv1.getVisitNumber().parse(form.getValue("visitnumber"));
 			pv1.getAdmitDateTime().getTime().setValue(toDateWithTime(form.getValue("admitdatetime")));
 
-			backgroundTaskExecutor.submit(new SendADTTask(request, form.getValue("host"), form.getValue("port")));
+			backgroundTaskExecutor.submitTask(new SendADTTask(request, form.getValue("host"), form.getValue("port")));
 						
 		} catch (HL7Exception | IOException e) {
 			throw new RuntimeException(e);	// TODO error handling?
@@ -159,6 +159,7 @@ public class SendADTPage extends MenuPage {
 			this.request = request;
 			this.host = host;
 			this.port = port;
+			updateTitle(I18N.get("SendADT"));
 		}
 
 		@Override
