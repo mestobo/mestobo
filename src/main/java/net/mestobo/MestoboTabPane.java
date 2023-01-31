@@ -2,6 +2,7 @@ package net.mestobo;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.panemu.tiwulfx.control.dock.DetachableTab;
 import com.panemu.tiwulfx.control.dock.DetachableTabPane;
 import com.panemu.tiwulfx.control.dock.DetachableTabPaneFactory;
 import com.panemu.tiwulfx.control.dock.TabStageFactory;
@@ -42,7 +43,8 @@ public class MestoboTabPane extends DetachableTabPane implements MenuProvider {
 	}
 
 	public void newTab() {
-		addTab("        ", null);
+		DetachableTab tab = addTab("        ", null);
+		getSelectionModel().select(tab);
 	}
 
 	public void closeTab() {
