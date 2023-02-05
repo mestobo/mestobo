@@ -9,6 +9,9 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.measure.quantity.Time;
+
+import com.dlsc.unitfx.QuantityInputField;
 import com.github.javafaker.Faker;
 import com.google.inject.Inject;
 
@@ -25,33 +28,45 @@ import ca.uhn.hl7v2.model.v25.segment.MSH;
 import ca.uhn.hl7v2.model.v25.segment.PID;
 import ca.uhn.hl7v2.model.v25.segment.PV1;
 import ca.uhn.hl7v2.parser.Parser;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
+import javafx.util.Duration;
 import net.mestobo.form.ComboFormField;
 import net.mestobo.form.DateFormField;
 import net.mestobo.form.DateTimeFormField;
 import net.mestobo.form.Form;
 import net.mestobo.form.IntegerFormField;
 import net.mestobo.form.TextFormField;
+import tech.units.indriya.unit.Units;
 
 /** SendADTPage allows to create/send an ADT message. */
 public class SendADTPage extends MenuPage {
 	
 	private static AtomicLong counter = new AtomicLong(1);
 	private Form form;
+	private Timeline autoFire = new Timeline(new KeyFrame(Duration.seconds(5), this::autoFire));
+	private CheckBox autoFireToggle;
 	
 	@Inject
 	private BackgroundTaskExecutor backgroundTaskExecutor;
 	
 	public SendADTPage() {
 		super(I18N.get("SendADT"));
+		autoFire.setCycleCount(Timeline.INDEFINITE);
 	}
 
 	@Override
 	protected Node createPresentation() {
 		form = new Form();
 		form.addButton(I18N.get("RandomValues"), "randomvalues", this::fillWithRandomValues).withIcon("dashicons-randomize");
+		autoFireToggle = GUIFactory.create(CheckBox.class, form, "autofire-checkbox");
+		autoFireToggle.selectedProperty().addListener((observable, oldValue, newValue) -> updatePlayStop());
+		form.addTopBarItem(autoFireToggle);
+		form.addTopBarItem(createDelayInput());		
 		form.addValidationButton(I18N.get("Send"), "send", this::send).withIcon("fth-send");
 		form.addField("host", new TextFormField(I18N.get("Host"))).required();
 		form.addField("port", new IntegerFormField(I18N.get("Port"))).defaultValue(2575).required();
@@ -73,6 +88,32 @@ public class SendADTPage extends MenuPage {
 		return form;
 	}
 	
+	private Node createDelayInput() {		
+		QuantityInputField<Time> inputField = new QuantityInputField<>();
+		inputField.getAvailableUnits().add(Units.SECOND);
+		inputField.getAvailableUnits().add(Units.MINUTE);
+		inputField.getAvailableUnits().add(Units.HOUR);
+		inputField.setValue(5.0);
+		inputField.setUnit(Units.SECOND);
+//		inputField.disableProperty().bind(autoFireToggle.selectedProperty().not());
+		return inputField;
+	}
+
+	private void updatePlayStop() {
+		if (autoFireToggle.isSelected()) {
+			autoFire.play();
+		} else {
+			autoFire.stop();
+		}
+	}
+	
+	private void autoFire(ActionEvent e) {
+		fillWithRandomValues(e);
+		if (!form.getValidator().containsErrors()) { 
+			send(e);
+		}
+	}
+
 	private void fillWithRandomValues(ActionEvent e) {
 		Faker faker = new Faker();
 		form.setValue("patientid", faker.idNumber().valid());

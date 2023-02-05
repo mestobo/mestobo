@@ -6,12 +6,14 @@ import java.util.Map;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import net.mestobo.GUIFactory;
 import net.mestobo.ImageButton;
+import net.mestobo.ImageToggleButton;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
 
@@ -46,6 +48,13 @@ public class Form extends BorderPane {
 		return formField;
 	}
 	
+	public ImageToggleButton addToggleButton(String label, String id) {
+		ImageToggleButton button = GUIFactory.create(ImageToggleButton.class, this, id);
+		button.setText(label);
+		topBar.getChildren().add(button);
+		return button;
+	}
+	
 	public ImageButton addButton(String label, String id, EventHandler<ActionEvent> eventHandler) {
 		ImageButton button = GUIFactory.create(ImageButton.class, this, id);
 		button.setText(label);
@@ -66,6 +75,10 @@ public class Form extends BorderPane {
 		GUIFactory.prepare(wrappedButton, this, id + "-wrapper");
 		topBar.getChildren().add(wrappedButton);
 		return button;
+	}
+	
+	public void addTopBarItem(Node topBarItem) {
+		topBar.getChildren().add(topBarItem);
 	}
 	
 	public Validator getValidator() {
