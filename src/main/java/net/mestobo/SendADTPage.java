@@ -9,9 +9,6 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-import javax.measure.quantity.Time;
-
-import com.dlsc.unitfx.QuantityInputField;
 import com.github.javafaker.Faker;
 import com.google.inject.Inject;
 
@@ -30,26 +27,33 @@ import ca.uhn.hl7v2.model.v25.segment.PV1;
 import ca.uhn.hl7v2.parser.Parser;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
+import javafx.util.converter.IntegerStringConverter;
 import net.mestobo.form.ComboFormField;
 import net.mestobo.form.DateFormField;
 import net.mestobo.form.DateTimeFormField;
 import net.mestobo.form.Form;
 import net.mestobo.form.IntegerFormField;
 import net.mestobo.form.TextFormField;
-import tech.units.indriya.unit.Units;
 
 /** SendADTPage allows to create/send an ADT message. */
 public class SendADTPage extends MenuPage {
+	
+	private static final int DEFAULT_DELAY = 5; 
 	
 	private static AtomicLong counter = new AtomicLong(1);
 	private Form form;
 	private Timeline autoFire = new Timeline(new KeyFrame(Duration.seconds(5), this::autoFire));
 	private CheckBox autoFireToggle;
+	private TextField delayInput;
 	
 	@Inject
 	private BackgroundTaskExecutor backgroundTaskExecutor;
@@ -67,6 +71,7 @@ public class SendADTPage extends MenuPage {
 		autoFireToggle.selectedProperty().addListener((observable, oldValue, newValue) -> updatePlayStop());
 		form.addTopBarItem(autoFireToggle);
 		form.addTopBarItem(createDelayInput());		
+		form.addTopBarItem(new Text("s"));		
 		form.addValidationButton(I18N.get("Send"), "send", this::send).withIcon("fth-send");
 		form.addField("host", new TextFormField(I18N.get("Host"))).required();
 		form.addField("port", new IntegerFormField(I18N.get("Port"))).defaultValue(2575).required();
@@ -89,16 +94,24 @@ public class SendADTPage extends MenuPage {
 	}
 	
 	private Node createDelayInput() {		
-		QuantityInputField<Time> inputField = new QuantityInputField<>();
-		inputField.getAvailableUnits().add(Units.SECOND);
-		inputField.getAvailableUnits().add(Units.MINUTE);
-		inputField.getAvailableUnits().add(Units.HOUR);
-		inputField.setValue(5.0);
-		inputField.setUnit(Units.SECOND);
-//		inputField.disableProperty().bind(autoFireToggle.selectedProperty().not());
-		return inputField;
+		delayInput  = new TextField();
+		TextFormatter<Integer> formatter = new TextFormatter<>(new IntegerStringConverter(), DEFAULT_DELAY);
+		delayInput.setTextFormatter(formatter);
+		formatter.valueProperty().addListener(this::delayChanged);
+		return delayInput;
 	}
-
+	
+	private void delayChanged(ObservableValue<? extends Integer> observable, Integer oldValue, Integer  newValue) {
+		autoFire.stop();
+		if (newValue != null && newValue > 0) {
+			autoFire = new Timeline(new KeyFrame(Duration.seconds(newValue), this::autoFire));
+			autoFire.setCycleCount(Timeline.INDEFINITE);
+		} else {
+			delayInput.setText("" + DEFAULT_DELAY);
+		}
+		updatePlayStop();		
+	}
+	
 	private void updatePlayStop() {
 		if (autoFireToggle.isSelected()) {
 			autoFire.play();

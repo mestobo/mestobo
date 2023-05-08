@@ -26,7 +26,6 @@ dependencies {
 	implementation "ca.uhn.hapi:hapi-base:$hapiVersion"
 	implementation "ca.uhn.hapi:hapi-structures-v25:$hapiVersion"
 	implementation "tech.units:indriya:2.1.3"
-	implementation "com.dlsc.unitfx:unitfx:1.0.10"
 	implementation "org.kordamp.ikonli:ikonli-javafx:$ikonliVersion"
 	implementation "org.kordamp.ikonli:ikonli-core:$ikonliVersion"
 	implementation "org.kordamp.ikonli:ikonli-carbonicons-pack:$ikonliVersion"
