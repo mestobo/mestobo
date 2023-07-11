@@ -1,0 +1,20 @@
+Your Private Enterprise Number request has been implemented
+
+Your request to register a Private Enterprise Number is complete:
+
+Decimal: 60713
+Organization: Mestobo
+Contact: Robert Lichtenberger
+Email: r.lichtenberger@gmail.com
+Registry URL: https://www.iana.org/assignments/enterprise-numbers/
+
+If you need to update the record, please use the form at this link:
+
+https://www.iana.org/assignments/enterprise-numbers/assignment/modify/
+
+If you have any questions, please contact us at iana-pen@iana.org.
+
+Best regards,
+Internet Assigned Numbers Authority (IANA)
+
+Which will give us a "root" UID of 1.3.6.1.4.1.60713
