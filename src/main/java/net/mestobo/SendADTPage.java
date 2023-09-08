@@ -77,17 +77,21 @@ public class SendADTPage extends MenuPage {
 		form.addField("port", new IntegerFormField(I18N.get("Port"))).defaultValue(2575).required();
 		form.addField("receiving_application", new TextFormField(I18N.get("ReceivingApplication"))).required().defaultValue("APP");
 		form.addField("receiving_facility", new TextFormField(I18N.get("ReceivingApplication"))).required().defaultValue("FACILITY");
+		form.addField("messagetypecode", new TextFormField(I18N.get("MessageTypeCode")));
+		form.addField("telecommunication_equipment_type", new TextFormField(I18N.get("TelecommunicationEquipmentType")));
 		form.addField("patientid", new TextFormField(I18N.get("PatientID"))).recommended();
 		form.addField("lastname", new TextFormField(I18N.get("LastName"))).recommended();
 		form.addField("firstname", new TextFormField(I18N.get("FirstName"))).maxLength(30);
 		form.addField("sex", new ComboFormField(I18N.get("Sex"))).withValues("A", "F", "M", "N", "O", "U");
 		form.addField("birthdate", new DateFormField(I18N.get("BirthDate"))).recommended();
+		form.addField("titlesuffix",new TextFormField(I18N.get("TitleSuffix")));
 		form.addField("streetname", new TextFormField(I18N.get("StreetName")));
 		form.addField("streetnumber", new TextFormField(I18N.get("StreetNumber")));
 		form.addField("city", new TextFormField(I18N.get("City")));
 		form.addField("state", new TextFormField(I18N.get("State")));
 		form.addField("zipcode", new TextFormField(I18N.get("Zipcode")));
 		form.addField("country", new TextFormField(I18N.get("Country")));
+		form.addField("phonenumber", new TextFormField(I18N.get("PhoneNumber")));
 		form.addField("visitnumber", new TextFormField(I18N.get("VisitNumber")));
 		form.addField("admitdatetime", new DateTimeFormField(I18N.get("AdmitDateTime")));
 		return form;
@@ -142,6 +146,7 @@ public class SendADTPage extends MenuPage {
 		form.setValue("country", faker.address().country());		
 		form.setValue("visitnumber", faker.idNumber().valid());		
 		form.setValue("admitdatetime", toLocalDateTime(faker.date().future(14, TimeUnit.DAYS)));		
+		form.setValue("phonenumber", faker.phoneNumber());
 	}
 	
 	@Override
@@ -170,6 +175,7 @@ public class SendADTPage extends MenuPage {
 			mshSegment.getReceivingApplication().getNamespaceID().setValue(form.getValue("receiving_application"));
 			mshSegment.getReceivingFacility().getNamespaceID().setValue(form.getValue("receiving_facility"));
 			mshSegment.getSequenceNumber().setValue("" + counter.getAndIncrement());
+			mshSegment.getMessageType().getMessageCode().setValue(form.getValue("messagetypecode"));
 			
 			PID pid = request.getPID();
 			pid = request.getPID();
@@ -185,6 +191,9 @@ public class SendADTPage extends MenuPage {
 			pid.getPatientAddress(0).getZipOrPostalCode().setValue(form.getValue("zipcode"));
 			pid.getPatientAddress(0).getCountry().setValue(form.getValue("country"));
 			pid.getDateTimeOfBirth().getTime().setValue(toDate(form.getValue("birthdate")));
+			pid.getPhoneNumberHome(0).getTelephoneNumber().setValue(form.getValue("phonenumber"));
+			pid.getPhoneNumberHome(0).getTelecommunicationEquipmentType().setValue(form.getValue("telecommunication_equipment_type"));
+			pid.getPatientName(0).getSuffixEgJRorIII().setValue(form.getValue("titlesuffix"));
 			
 			EVN evn = request.getEVN();
 			evn.getEventOccurred().getTime().setValue(new Date());
