@@ -1,6 +1,8 @@
 package net.mestobo;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -77,7 +79,7 @@ public class SendADTPage extends MenuPage {
 		form.addField("port", new IntegerFormField(I18N.get("Port"))).defaultValue(2575).required();
 		form.addField("receiving_application", new TextFormField(I18N.get("ReceivingApplication"))).required().defaultValue("APP");
 		form.addField("receiving_facility", new TextFormField(I18N.get("ReceivingApplication"))).required().defaultValue("FACILITY");
-		form.addField("messagetypecode", new TextFormField(I18N.get("MessageTypeCode")));
+		form.addField("messagetypecode", new TextFormField(I18N.get("MessageTypeCode"))).defaultValue("ADT").required();
 		form.addField("telecommunication_equipment_type", new TextFormField(I18N.get("TelecommunicationEquipmentType")));
 		form.addField("patientid", new TextFormField(I18N.get("PatientID"))).recommended();
 		form.addField("lastname", new TextFormField(I18N.get("LastName"))).recommended();
@@ -239,7 +241,13 @@ public class SendADTPage extends MenuPage {
 				Message response = initiator.sendAndReceive(request);
 				updateMessage(I18N.get("ResponseReceived"));
 				System.out.println("Response:\n" + parser.encode(response));
-			} 
+			} catch (Exception e) {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				updateMessage(sw.toString());
+				throw e;
+			}
 			return null;
 		}
 		
