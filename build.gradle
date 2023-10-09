@@ -6,6 +6,9 @@ plugins {
 repositories {
 	mavenCentral()
 	jcenter()
+	maven {
+		url "https://maven.scijava.org/content/repositories/public/"
+	}
 }
 
 ext {
@@ -36,6 +39,8 @@ dependencies {
 	implementation "org.kordamp.ikonli:ikonli-zondicons-pack:$ikonliVersion"
 	implementation "org.kordamp.ikonli:ikonli-octicons-pack:$ikonliVersion"
 	implementation "no.tornado:tornadofx-controls:1.0.4"
+	implementation "org.freemarker:freemarker:2.3.32"
+	implementation "org.dcm4che:dcm4che-core:5.31.0"
 }
 
 application {
