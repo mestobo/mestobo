@@ -41,6 +41,7 @@ dependencies {
 	implementation "no.tornado:tornadofx-controls:1.0.4"
 	implementation "org.freemarker:freemarker:2.3.32"
 	implementation "org.dcm4che:dcm4che-core:5.31.0"
+	implementation "org.apache.groovy:groovy:4.0.15"
 }
 
 application {
