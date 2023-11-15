@@ -25,7 +25,7 @@ public class DateFormField extends FormField<LocalDate, DateFormField> {
 	}
 
 	@Override
-	protected Property<LocalDate> valueProperty() {
+	public Property<LocalDate> valueProperty() {
 		return datePicker.valueProperty();
 	}
 	

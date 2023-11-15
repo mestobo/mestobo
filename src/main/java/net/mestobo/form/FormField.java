@@ -31,7 +31,7 @@ public abstract class FormField<T, SELF extends FormField<T, SELF>> {
 	abstract protected Node createInputControl(Region parent);
 	
 	/** Property that represents the current value of this field. */
-	abstract protected Property<T> valueProperty();
+	abstract public Property<T> valueProperty();
 	
 	/** Property that is true, if this field is empty. */
 	abstract protected ObservableBooleanValue emptyProperty();

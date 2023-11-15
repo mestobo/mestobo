@@ -24,7 +24,7 @@ public class TextFormField extends FormField<String, TextFormField> {
 	}
 
 	@Override
-	protected Property<String> valueProperty() {
+	public Property<String> valueProperty() {
 		return textField.textProperty();
 	}
 

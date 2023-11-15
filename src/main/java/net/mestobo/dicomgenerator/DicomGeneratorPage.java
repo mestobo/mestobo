@@ -1,4 +1,4 @@
-package net.mestobo;
+package net.mestobo.dicomgenerator;
 
 
 import java.io.File;
@@ -16,14 +16,21 @@ import freemarker.core.InvalidReferenceException;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import net.mestobo.BackgroundTaskExecutor;
+import net.mestobo.I18N;
+import net.mestobo.MenuPage;
+import net.mestobo.form.DirectoryFormField;
+import net.mestobo.form.FileFormField;
 import net.mestobo.form.Form;
-import net.mestobo.form.TextFormField;
 
 /** DicomGeneratorPage allows to generate fictitious DICOM studies. */
 public class DicomGeneratorPage extends MenuPage {
+	
+	private FileFormField templateField;
 	
 	@Inject
 	private BackgroundTaskExecutor backgroundTaskExecutor;
@@ -50,10 +57,18 @@ public class DicomGeneratorPage extends MenuPage {
 	@Override
 	protected Node createPresentation() {
 		Form form = new Form();
-		form.addField("destination_directory", new TextFormField(I18N.get("DestinationDirectory"))).required();
-		form.addButton(I18N.get("Generate"), "generate", this::generateDicom).withIcon("dashicons-controls-play");
+		form.addField("destination_directory", new DirectoryFormField(I18N.get("DestinationDirectory"))).required();
+		templateField = form.addField("template", 	new FileFormField(I18N.get("Template")))
+			.withExtensionFilter(I18N.get("Groovy"),  "*.groovy")
+			.required();
+		templateField.valueProperty().addListener(this::templateChanged);
+		form.addValidationButton(I18N.get("Generate"), "generate", this::generateDicom).withIcon("dashicons-controls-play");
 		
 		return form;
+	}
+	
+	private void templateChanged(ObservableValue<? extends File> observable, File oldValue, File newValue) {
+		
 	}
 	
 	private void generateDicom(ActionEvent e) {

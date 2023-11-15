@@ -28,7 +28,7 @@ public class IntegerFormField extends FormField<Integer, IntegerFormField> {
 	}
 
 	@Override
-	protected Property<Integer> valueProperty() {
+	public Property<Integer> valueProperty() {
 		return spinner.getValueFactory().valueProperty();
 	}
 

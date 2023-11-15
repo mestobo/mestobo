@@ -24,7 +24,7 @@ public class ComboFormField extends FormField<String, ComboFormField> {
 	}
 
 	@Override
-	protected Property<String> valueProperty() {
+	public Property<String> valueProperty() {
 		return combobox.valueProperty();
 	}
 

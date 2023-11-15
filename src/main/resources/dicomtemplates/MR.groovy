@@ -1,8 +1,18 @@
-import java.time.LocalDate;
+/* import java.time.LocalDate;
 import java.time.LocalTime;
 import org.dcm4che3.data.UID;
+-- should be added automatically ... */
 
 // TODO :: how to convey "required" fields in form?
+void setupForm(DicomGeneratorForm form) {
+         form.addDate("StudyDate", LocalDate.now());
+          
+}
+
+void createDataset() {
+         
+}
+
 
 ds.add(0x00080005, "ISO_IR 100");
 ds.add(0x0008, 0x0008, "ORIGINAL\\PRIMARY\\OTHER\\R\\IR");
