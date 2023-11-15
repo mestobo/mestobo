@@ -1,5 +1,22 @@
+import java.time.LocalDate;
+import java.time.LocalTime;
+import org.dcm4che3.data.UID;
+
+// TODO :: how to convey "required" fields in form?
 
 ds.add(0x00080005, "ISO_IR 100");
+ds.add(0x0008, 0x0008, "ORIGINAL\\PRIMARY\\OTHER\\R\\IR");
+ds.add("InstanceCreationDate", LocalDate.now());
+ds.add("InstanceCreationTime", LocalTime.now());
+ds.add("SOPClassUID", UID.MRImageStorage);
+ds.add("SOPInstanceUID", ds.generateSOPInstanceUID());
+ds.add("StudyDate", form.getDate("StudyDate"));
+ds.add("SeriesDate", form.getDate("SeriesDate"));
+ds.add("StudyTime", form.getTime("StudyTime"));
+ds.add("SeriesTime", form.getTime("SeriesTime"));
+ds.add("AccessionNumber", form.getShortString("AccessionNumber"));
+ds.add("Modality", "MR");
+ds.add("Manufacturer", form.getLongString("Manufacturer", "Mestobo")); // with default?
 
 /* 
 # Dicom-Data-Set
