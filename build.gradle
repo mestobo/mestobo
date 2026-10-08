@@ -1,11 +1,10 @@
 plugins {
 	id 'application'
-	id 'org.openjfx.javafxplugin' version '0.0.13'
+	id('org.openjfx.javafxplugin') version '0.1.0'
 }
 
 repositories {
 	mavenCentral()
-	jcenter()
 	maven {
 		url "https://maven.scijava.org/content/repositories/public/"
 	}
@@ -57,5 +56,3 @@ javafx {
 	modules = [ 'javafx.controls', 'javafx.graphics', 'javafx.base' ]
 }
 
-sourceCompatibility = 17
-targetCompatibility = 17
