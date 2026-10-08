@@ -28,7 +28,7 @@ public abstract class MenuPage extends Page implements MenuProvider {
 	}
 
 	private EventHandler<ActionEvent> getEventHandler() {
-		return e -> {
+		return _ -> {
 			try {
 				mestoboApp.showPage(FxLauncher.getInjector().getInstance(getClass()));
 			} catch (IllegalArgumentException | SecurityException e1) {

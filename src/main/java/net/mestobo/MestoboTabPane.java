@@ -32,13 +32,13 @@ public class MestoboTabPane extends DetachableTabPane implements MenuProvider {
 			I18N.get("Extras"), 
 			"tabhandling", 
 			createMenuItem(I18N.get("NewTab"), KeyCombination.keyCombination("Shortcut+T")), 
-			e -> newTab()
+			_ -> newTab()
 		);
 		menuBar.addMenu(
 			I18N.get("Extras"), 
 			"tabhandling", 
 			createMenuItem(I18N.get("CloseTab"), KeyCombination.keyCombination("Shortcut+W")), 
-			e -> closeTab()
+			_ -> closeTab()
 		);
 	}
 
@@ -51,7 +51,7 @@ public class MestoboTabPane extends DetachableTabPane implements MenuProvider {
 		getTabs().remove(getSelectionModel().getSelectedItem());
 	}
 
-	private final TabStageFactory tabStageFactory = (tabPane, tab) -> {
+	private final TabStageFactory<TabStage> tabStageFactory = (tabPane, tab) -> {
 		TabStage stage = new TabStage(tabPane, tab);
 		stylesheetManager.addListener(stage.getScene());
 		return stage;

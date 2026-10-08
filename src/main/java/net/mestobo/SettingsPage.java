@@ -13,6 +13,6 @@ public class SettingsPage implements MenuProvider {
 	@Override
 	public void setupMenu(MestoboMenuBar menuBar) {
 		MenuItem menuItem = new MenuItem(I18N.get("Settings"));
-		menuBar.addMenu(I18N.get("Extras"), "settings", menuItem, e -> settingsManager.showSettings(false));
+		menuBar.addMenu(I18N.get("Extras"), "settings", menuItem, _ -> settingsManager.showSettings(false));
 	}
 }

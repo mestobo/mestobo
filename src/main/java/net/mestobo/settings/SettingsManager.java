@@ -65,7 +65,7 @@ public class SettingsManager {
 
 		ObjectProperty<Language> languageSelection = new SimpleObjectProperty<>(Language.GERMAN);
 		ObjectProperty<Theme> themeSelection = new SimpleObjectProperty<>(THEME_DEFAULT);
-		languageSelection.addListener((obs, oldv, newv) -> selectedlanguage.setValue(newv.getLocale()));
+		languageSelection.addListener((_, _, newv) -> selectedlanguage.setValue(newv.getLocale()));
 		themeSelection.addListener(this::onThemeSelectionChanged);
 
 		return PreferencesFx.of(getClass(),

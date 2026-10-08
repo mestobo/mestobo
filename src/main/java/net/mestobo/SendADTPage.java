@@ -70,7 +70,7 @@ public class SendADTPage extends MenuPage {
 		form = new Form();
 		form.addButton(I18N.get("RandomValues"), "randomvalues", this::fillWithRandomValues).withIcon("dashicons-randomize");
 		autoFireToggle = GUIFactory.create(CheckBox.class, form, "autofire-checkbox");
-		autoFireToggle.selectedProperty().addListener((observable, oldValue, newValue) -> updatePlayStop());
+		autoFireToggle.selectedProperty().addListener((_, _, _) -> updatePlayStop());
 		form.addTopBarItem(autoFireToggle);
 		form.addTopBarItem(createDelayInput());		
 		form.addTopBarItem(new Text("s"));		
