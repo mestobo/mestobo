@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
@@ -22,6 +23,7 @@ public class MestoboApplication {
     
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle(I18N.get("WindowTitle"));
+		primaryStage.getIcons().add(new Image(Mestobo.class.getClassLoader().getResourceAsStream("icon.png")));
 
         StackPane root = new StackPane();
         VBox vbox = GUIFactory.create(VBox.class, root, "mainbox");

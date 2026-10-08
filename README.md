@@ -1,5 +1,6 @@
-Mestobo
-=====
+<p align="left">
+  <img src="src/main/resources/logo.svg" alt="mestobo logo" width="320">
+</p>
 
 [![Build](../../actions/workflows/test.yml/badge.svg)](../../actions/workflows/test.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
