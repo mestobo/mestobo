@@ -17,6 +17,7 @@ ext {
 
 dependencies {
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	implementation 'com.google.guava:guava:33.7.2-jre'
 	implementation 'com.google.inject:guice:7.0.0'
