@@ -30,7 +30,6 @@ import ca.uhn.hl7v2.parser.Parser;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
@@ -45,6 +44,8 @@ import net.mestobo.form.DateTimeFormField;
 import net.mestobo.form.Form;
 import net.mestobo.form.IntegerFormField;
 import net.mestobo.form.TextFormField;
+import net.mestobo.task.BackgroundTaskExecutor;
+import net.mestobo.task.MestoboTask;
 
 /** SendADTPage allows to create/send an ADT message. */
 public class SendADTPage extends MenuPage {
@@ -167,7 +168,7 @@ public class SendADTPage extends MenuPage {
 		return I18N.get("SendADT");
 	}
 	
-	public void send(ActionEvent __) {
+	public void send(ActionEvent event) {
 		try {
 			ADT_A01 request = new ADT_A01();
 			request.initQuickstart("ADT", "A01", "P");
@@ -181,7 +182,6 @@ public class SendADTPage extends MenuPage {
 			mshSegment.getMessageType().getMessageCode().setValue(form.getValue("messagetypecode"));
 			
 			PID pid = request.getPID();
-			pid = request.getPID();
 			pid.getPatientName(0).getFamilyName().getSurname().setValue(form.getValue("lastname"));
 			pid.getPatientName(0).getGivenName().setValue(form.getValue("firstname"));
 			pid.getPatientName(0).getNameTypeCode().setValue(getMenuCategory());
@@ -215,17 +215,17 @@ public class SendADTPage extends MenuPage {
 		}
 	}
 	
-	private class SendADTTask extends Task<Void> {
+	private class SendADTTask extends MestoboTask<Void> {
 		
 		private AbstractMessage request;
 		private String host;
 		private int port;
 
 		public SendADTTask(AbstractMessage request, String host, int port) {
+			super(I18N.get("SendADT"));
 			this.request = request;
 			this.host = host;
 			this.port = port;
-			updateTitle(I18N.get("SendADT"));
 		}
 
 		@Override

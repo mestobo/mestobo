@@ -20,12 +20,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import net.mestobo.BackgroundTaskExecutor;
 import net.mestobo.I18N;
 import net.mestobo.MenuPage;
 import net.mestobo.form.DirectoryFormField;
 import net.mestobo.form.FileFormField;
 import net.mestobo.form.Form;
+import net.mestobo.task.BackgroundTaskExecutor;
 
 /** DicomGeneratorPage allows to generate fictitious DICOM studies. */
 public class DicomGeneratorPage extends MenuPage {
